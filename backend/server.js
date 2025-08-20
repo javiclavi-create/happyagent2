@@ -7,9 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // --- THE FIX IS HERE ---
-// More specific CORS configuration to allow requests from your Vercel app
+// This tells the server to ONLY accept requests from your live website.
 const corsOptions = {
-  origin: "https://happyagent2.vercel.app", // This is your Vercel URL
+  origin: "https://happyagent2.vercel.app",
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));

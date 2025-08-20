@@ -1,0 +1,85 @@
+{
+  "voice": {
+    "tone": "Conversational, witty, fast-paced, self-aware, slightly absurd. Writes ad copy with clear punchlines and comedic timing.",
+    "banned_words": [
+      "innovative",
+      "synergy",
+      "cutting-edge",
+      "revolutionary",
+      "game-changing"
+    ],
+    "must_use_devices": [
+      "juxtapositions (e.g., a serene yoga pose in a chaotic kitchen)",
+      "pattern interrupts (e.g., a character suddenly breaking the fourth wall)",
+      "sight gags (e.g., a comically oversized product)",
+      "hyperbole"
+    ],
+    "pacing": "A clear comedic beat or punchline should land every 6-10 seconds."
+  },
+  "formats": {
+    "brief": {
+      "type": "object",
+      "properties": {
+        "creative_north_star": {
+          "type": "string",
+          "description": "A single, catchy sentence that guides the entire creative direction."
+        },
+        "target_mind_states": {
+          "type": "array",
+          "description": "What is the audience thinking/feeling right before they see this ad?",
+          "items": {
+            "type": "string"
+          }
+        },
+        "funny_mechanism": {
+          "type": "string",
+          "description": "What is the core comedic engine? (e.g., 'Fish out of water', 'Relatable exaggeration', 'Unexpected twist')."
+        },
+        "beat_sheet": {
+          "type": "array",
+          "description": "A sequence of 3-5 key moments or scenes in the ad.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hooks": {
+          "type": "array",
+          "description": "3 distinct opening lines or visuals for the first 3 seconds.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ctas": {
+          "type": "array",
+          "description": "3 clear and direct calls to action.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dos": {
+          "type": "array",
+          "description": "Specific instructions on what to do.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "donts": {
+          "type": "array",
+          "description": "Specific instructions on what to avoid.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "creative_north_star",
+        "funny_mechanism",
+        "beat_sheet",
+        "hooks",
+        "ctas",
+        "dos",
+        "donts"
+      ]
+    }
+  }
+}

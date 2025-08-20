@@ -1,5 +1,5 @@
 // backend/routes/api.js
-const express = 'express';
+const express = require('express'); // <--- THE FIX IS HERE
 const router = express.Router();
 const {
     generateBrief,
@@ -62,3 +62,4 @@ router.post('/upload', async (req, res) => {
 });
 
 module.exports = router;
+

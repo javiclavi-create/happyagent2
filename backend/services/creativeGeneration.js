@@ -1,23 +1,22 @@
 // backend/services/creativeGeneration.js
 const fs = require('fs').promises;
 const path = require('path');
-const fetch = require('node-fetch'); // Make sure to install node-fetch: npm install node-fetch
+const fetch = require('node-fetch');
 
 // --- Configuration ---
-// IMPORTANT: In a real application, use environment variables for API keys.
-const API_KEY = ""; // Leave blank, will be handled by the environment
+// This tells the code to use the secret key we will add on Render
+const API_KEY = process.env.GEMINI_API_KEY; 
 const MODEL_NAME = 'gemini-2.5-flash-preview-05-20';
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
-const DNA_PATH = path.join(__dirname, '../../config/brand_dna.json');
-const EXEMPLARS_PATH = path.join(__dirname, '../../data/exemplars.json');
+// This creates a reliable path that works on any server.
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
+const DNA_PATH = path.join(PROJECT_ROOT, 'config/brand_dna.json');
+const EXEMPLARS_PATH = path.join(PROJECT_ROOT, 'data/exemplars.json');
+
 
 // --- File System Operations ---
 
-/**
- * Loads the brand DNA from the JSON file.
- * @returns {Promise<Object>} The parsed brand DNA JSON.
- */
 const loadDna = async () => {
     try {
         const data = await fs.readFile(DNA_PATH, 'utf-8');
@@ -28,17 +27,12 @@ const loadDna = async () => {
     }
 };
 
-/**
- * Loads the exemplars from the JSON file.
- * @returns {Promise<Array>} The parsed exemplars JSON.
- */
 const loadExemplars = async () => {
     try {
         const data = await fs.readFile(EXEMPLARS_PATH, 'utf-8');
         return JSON.parse(data);
     } catch (error) {
         console.error("Error loading exemplars:", error);
-        // If the file doesn't exist or is empty, return an empty array
         if (error.code === 'ENOENT') {
             return [];
         }
@@ -46,15 +40,11 @@ const loadExemplars = async () => {
     }
 };
 
-/**
- * Saves a new exemplar to the JSON file.
- * @param {string} exemplarText - The new ad/brief text to save.
- */
 const saveExemplar = async (exemplarText) => {
     try {
         const exemplars = await loadExemplars();
         exemplars.push({
-            id: Date.now(), // Simple unique ID
+            id: Date.now(),
             text: exemplarText
         });
         await fs.writeFile(EXEMPLARS_PATH, JSON.stringify(exemplars, null, 2), 'utf-8');
@@ -64,10 +54,6 @@ const saveExemplar = async (exemplarText) => {
     }
 };
 
-/**
- * Overwrites the brand DNA file with new content.
- * @param {Object} newDna - The new DNA object to save.
- */
 const saveDna = async (newDna) => {
     try {
         await fs.writeFile(DNA_PATH, JSON.stringify(newDna, null, 2), 'utf-8');
@@ -80,11 +66,6 @@ const saveDna = async (newDna) => {
 
 // --- Core AI Logic ---
 
-/**
- * Generates a creative brief using the Gemini API.
- * @param {Object} userInput - The user's input ({ product, audience }).
- * @returns {Promise<Object>} The structured JSON brief from the AI.
- */
 const generateBrief = async (userInput) => {
     try {
         const dna = await loadDna();
@@ -124,7 +105,6 @@ const generateBrief = async (userInput) => {
         const result = await response.json();
         
         if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0]) {
-            // The response from the API is a string that needs to be parsed into a JSON object
             return JSON.parse(result.candidates[0].content.parts[0].text);
         } else {
             console.error("Unexpected API response structure:", JSON.stringify(result, null, 2));
@@ -146,4 +126,3 @@ module.exports = {
     updateDna: saveDna,
     addExemplar: saveExemplar,
 };
-

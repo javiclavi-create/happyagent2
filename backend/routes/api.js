@@ -1,5 +1,5 @@
 // backend/routes/api.js
-const express = require('express'); // <--- THE FIX IS HERE
+const express = require('express');
 const router = express.Router();
 const {
     generateBrief,
@@ -10,6 +10,7 @@ const {
 
 // Route to generate a new creative brief
 router.post('/generate', async (req, res) => {
+    console.log("SUCCESS: Received request for /api/generate"); // <-- ADDED LOGGING
     try {
         const { product, audience } = req.body;
         if (!product || !audience) {
@@ -25,6 +26,7 @@ router.post('/generate', async (req, res) => {
 
 // Route to get the brand DNA
 router.get('/dna', async (req, res) => {
+    console.log("SUCCESS: Received request for /api/dna"); // <-- ADDED LOGGING
     try {
         const dna = await getDna();
         res.json(dna);
@@ -36,6 +38,7 @@ router.get('/dna', async (req, res) => {
 
 // Route to update the brand DNA
 router.post('/dna', async (req, res) => {
+    console.log("SUCCESS: Received request to update DNA."); // <-- ADDED LOGGING
     try {
         const newDna = req.body;
         await updateDna(newDna);
@@ -48,6 +51,7 @@ router.post('/dna', async (req, res) => {
 
 // Route to upload a new exemplar ad
 router.post('/upload', async (req, res) => {
+    console.log("SUCCESS: Received request to upload exemplar."); // <-- ADDED LOGGING
     try {
         const { text } = req.body;
         if (!text) {
@@ -62,4 +66,5 @@ router.post('/upload', async (req, res) => {
 });
 
 module.exports = router;
+
 

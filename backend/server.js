@@ -4,11 +4,18 @@ const cors = require('cors');
 const apiRoutes = require('./routes/api');
 
 const app = express();
-// THE FIX IS HERE: We tell the app to use Render's port first.
-const PORT = process.env.PORT || 3001; 
+const PORT = process.env.PORT || 3001;
+
+// --- THE FIX IS HERE ---
+// More specific CORS configuration to allow requests from your Vercel app
+const corsOptions = {
+  origin: "https://happyagent2.vercel.app", // This is your Vercel URL
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+// --- END OF FIX ---
 
 // Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON bodies
 
 // API Routes
